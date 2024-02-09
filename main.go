@@ -20,7 +20,17 @@ func main() {
 		return
 	}
 
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: \n Resize Image : resize <image path> <width> <height> \n Check Size : resize check <image path>")
+		return
+	}
+
 	if os.Args[1] == "check" {
+		if len(os.Args) < 3 {
+			fmt.Println("Usage: resize check <image path>")
+			return
+		}
+
 		imagePath := filepath.Join(wd, os.Args[2])
 		file, err := os.Open(imagePath)
 		if err != nil {
@@ -35,18 +45,23 @@ func main() {
 		}
 
 		fmt.Println("size:", imageSize.Width, "x", imageSize.Height)
-		return 
+		return
+	}
+	if len(os.Args) < 4 {
+		fmt.Println("Usage: resize <image path> <width> <height>")
+		return
 	}
 
-	if len(os.Args) < 4 {
-		fmt.Println("Usage: resize <imagepath> <width> <height>")
+	if len(os.Args) > 4 {
+		fmt.Println("Too many arguments")
+		fmt.Println("Usage: resize <image path> <width> <height>")
 		return
 	}
 
 	imagePath := filepath.Join(wd, os.Args[1])
 	file, err := os.Open(imagePath)
 	if err != nil {
-		fmt.Printf("Error: %s", err)
+		fmt.Printf("Error: %s", "File not found")
 		return
 	}
 	defer file.Close()
@@ -57,13 +72,13 @@ func main() {
 
 	width, err := strconv.Atoi(widthStr)
 	if err != nil {
-		fmt.Printf("Error: %s", err)
+		fmt.Printf("Error: %s", "Invalid width")
 		return
 	}
 
 	height, err := strconv.Atoi(heightStr)
 	if err != nil {
-		fmt.Printf("Error: %s", err)
+		fmt.Printf("Error: %s", "Invalid height")
 		return
 	}
 
@@ -74,7 +89,7 @@ func main() {
 	var img image.Image
 	img, _, err = image.Decode(file)
 	if err != nil {
-		fmt.Printf("Error decoding image: %s", err)
+		fmt.Printf("Error decoding image: %s", "Invalid image format, only jpg, jpeg and png are supported")
 		return
 	}
 
@@ -89,7 +104,7 @@ func main() {
 
 	output, err := os.Create(resizedImageFilename)
 	if err != nil {
-		fmt.Printf("Error: %s", err)
+		fmt.Printf("Error: %s", "Error creating file")
 		return
 	}
 	defer output.Close()
@@ -101,7 +116,7 @@ func main() {
 		err = png.Encode(output, resizer)
 	}
 	if err != nil {
-		fmt.Printf("Error: %s", err)
+		fmt.Printf("Error: %s", "Error encoding image")
 		return
 	}
 
