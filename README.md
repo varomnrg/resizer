@@ -10,7 +10,7 @@ Resizer is a command-line tool designed to resize images quickly and easily. Whe
 
 To install Resizer, you can use the `go install` command:
 ```bash
-go install github.com/yourusername/resizer
+go install github.com/varomnrg/resizer@latest
 ```
 Make sure you have Go installed on your system before running the installation command.
 
